@@ -11,7 +11,7 @@
 #include "bench.h"
 #include "filetree.h"
 
-#define LEVELS 5
+#define LEVELS 6
 #define SUBDIRS 5
 #define FILES 5
 #define FILESIZE 1000
