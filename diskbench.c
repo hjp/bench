@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.2 1998-02-21 18:58:38 hjp Exp $";
+	"$Id: diskbench.c,v 1.3 2000-06-12 21:56:17 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,10 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.2  1998-02-21 18:58:38  hjp
+ * Revision 1.3  2000-06-12 21:56:17  hjp
+ * *** empty log message ***
+ *
+ * Revision 1.2  1998/02/21 18:58:38  hjp
  * fixed typo in diskbench.c
  * Added shell script to run disk benches.
  *
@@ -156,8 +159,12 @@ void diskbench (char ***argvp)
 	}
 
 	len = 0;
-	while (len < maxlen && (rc = write (fd, buf, BUFSIZE)) > 0) len += rc;
+	while (len < maxlen && (rc = write (fd, buf, BUFSIZE)) > 0) {
+	    if (verbose) putchar('.');
+	    len += rc;
+	}
 	close (fd);
+	if (verbose) printf("C\n");
 
 	gettimer (&tr, &tc);
 

@@ -1,1 +1,2 @@
+#!/bin/sh
 ./bench verbose disk tree | tee `hostname`.`date '+%Y-%m-%d:%H:%M:%S'`
