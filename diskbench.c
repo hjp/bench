@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.6 2003-01-31 11:50:11 hjp Exp $";
+	"$Id: diskbench.c,v 1.7 2003-01-31 12:07:19 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,10 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.6  2003-01-31 11:50:11  hjp
+ * Revision 1.7  2003-01-31 12:07:19  hjp
+ * Added largefile support (for real this time).
+ *
+ * Revision 1.6  2003/01/31 11:50:11  hjp
  * Changed verbose progress report from 1 dot per block to 1 line of
  * timing info per second.
  *
@@ -73,6 +76,9 @@ char diskbench_c_rcs_id [] =
  * some cleanup
  *
  */
+
+#define _LARGEFILE64_SOURCE 1
+
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
@@ -118,7 +124,8 @@ long lrand (long limit) {
 #	define O_LARGEFILE 0
 #endif
 
-#define OFLAGS (O_WRONLY|O_CREAT|O_BINARY|O_LARGEFILE)
+#define OWFLAGS (O_WRONLY|O_CREAT|O_BINARY|O_LARGEFILE)
+#define ORFLAGS (O_RDONLY|O_LARGEFILE)
 
 void diskbench (char ***argvp)
 {
@@ -161,7 +168,7 @@ void diskbench (char ***argvp)
          */
         if (verbose) printf ("Write test ...\n");
         resettimer ();
-	if ((fd = open (testfile, OFLAGS, 0666)) == -1) {
+	if ((fd = open (testfile, OWFLAGS, 0666)) == -1) {
 		printf ("Oops ! I cannot create the test file\nOS says : \"%s\"\n", strerror (errno));
 			return;
 	}
@@ -202,7 +209,7 @@ void diskbench (char ***argvp)
 
         resettimer ();
 
-	if ((fd = open (testfile, O_RDONLY)) == -1) {
+	if ((fd = open (testfile, ORFLAGS)) == -1) {
 		printf ("Oops ! I cannot open the test file\nOS says : \"%s\"\n", strerror (errno));
 		return;
 	}
