@@ -9,7 +9,7 @@
 	define some constants
 */
 
-#define MAXLINES	500
+#define MAXLINES	5000
 #define MAXCHAR		50
 
 /*
