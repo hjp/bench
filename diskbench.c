@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.9 2003-10-24 10:22:49 hjp Exp $";
+	"$Id: diskbench.c,v 1.10 2004-04-05 19:41:29 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,12 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.9  2003-10-24 10:22:49  hjp
+ * Revision 1.10  2004-04-05 19:41:29  hjp
+ * include float.h for DBL_MAX (how often?)
+ * shut up gcc.
+ * be more friendly to other processes.
+ *
+ * Revision 1.9  2003/10/24 10:22:49  hjp
  * Added parameter maxlen to restrict length of test file.
  *
  * Revision 1.8  2003/10/06 16:08:44  hjp
@@ -87,6 +92,7 @@ char diskbench_c_rcs_id [] =
 
 #include <ctype.h>
 #include <errno.h>
+#include <float.h>
 #include <limits.h>
 #include <signal.h>
 #include <stdio.h>
@@ -115,7 +121,7 @@ char diskbench_c_rcs_id [] =
 #endif
 
 
-double drand (double limit) {
+static double drand (double limit) {
 	double	fact = limit / ((double) RAND_MAX + 1);
 	double	rv = rand () * fact;
 	return rv;
@@ -196,6 +202,7 @@ void diskbench (char ***argvp)
 			len, tr,
 			tr != 0 ? len/tr : 0.0 );
 		ltr = tr;
+		usleep(40000);
 	    }
 	}
 	if (verbose) printf("F");
