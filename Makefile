@@ -4,8 +4,9 @@ CC = gcc -Wall -MD
 #CC = cc
 #CC = c89
 CFLAGS = -O6 -D_HPUX_SOURCE
-bench: bench.o diskbench.o screenbench.o sieve.o floatbench.o getch.o filetree.o timer.o
-	$(CC) -o bench bench.o diskbench.o screenbench.o sieve.o floatbench.o getch.o filetree.o timer.o
+bench: bench.o diskbench.o screenbench.o sieve.o floatbench.o getch.o \
+filetree.o timer.o fadd.o
+	$(CC) -o $@ $^
 
 clean:
 	rm -f bench *.o core *.i

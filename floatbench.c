@@ -32,7 +32,7 @@
 		again.
 */
 
-#define STEP 0.0025
+#define STEP 0.001
 
 void floatbench (char ***argvp)
 {

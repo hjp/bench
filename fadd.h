@@ -1,0 +1,2 @@
+void faddbench (char ***argvp);
+

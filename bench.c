@@ -16,6 +16,7 @@
 #include "floatbench.h"
 #include "sieve.h"
 #include "filetree.h"
+#include "fadd.h"
 
 int verbose = 0;
 char *id = NULL;
@@ -42,6 +43,7 @@ int main (int argc, char **argv)
 		{ "screen", screenbench },
 		{ "sieve", sieve },
 		{ "mandelbrot", floatbench },
+		{ "fadd", faddbench },
 		{ "tree", filetree },
 
 		/* The following are not benchmarks but global parameters */
