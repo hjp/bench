@@ -6,6 +6,7 @@
 
 #include "timer.h"
 #include "unixio.h"
+#include "pathmax.h"
 
 #include "bench.h"
 #include "filetree.h"
