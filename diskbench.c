@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.4 2001-03-07 15:42:55 hjp Exp $";
+	"$Id: diskbench.c,v 1.5 2002-10-01 18:13:23 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,20 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.4  2001-03-07 15:42:55  hjp
+ * Revision 1.5  2002-10-01 18:13:23  hjp
+ * Added large file support on systems which know O_LARGEFILE
+ *
+ * Fsync file after writing. This should make read performance somewhat
+ * more reliable since flushing the write buffers and reading the file
+ * won't overlap any more. It will also give "write to platter" instead
+ * of "write to cache" performance figures for writing which may or may not
+ * be what we want.
+ *
+ * Removed calibrating stage. With large disk caches this can be wildly
+ * off. Better to check runtime after every write. The overhead shouldn't
+ * be too bad.
+ *
+ * Revision 1.4  2001/03/07 15:42:55  hjp
  * Use GNUmake*s in Makefile
  * Use dirname of rundisk to determine path of bench
  * Removed <sys/stat.h> from diskbench.c for no apparent reason.
@@ -59,6 +72,7 @@ char diskbench_c_rcs_id [] =
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,12 +106,15 @@ long lrand (long limit) {
 }
 
 
-#ifdef O_BINARY
-#define OFLAGS (O_WRONLY|O_CREAT|O_BINARY)
-#else
-#define OFLAGS (O_WRONLY|O_CREAT)
+#ifndef O_BINARY
+#	define O_BINARY 0
 #endif
 
+#ifndef O_LARGEFILE
+#	define O_LARGEFILE 0
+#endif
+
+#define OFLAGS (O_WRONLY|O_CREAT|O_BINARY|O_LARGEFILE)
 
 void diskbench (char ***argvp)
 {
@@ -106,11 +123,10 @@ void diskbench (char ***argvp)
 	char	*testfile = "diskbench.tmp";
 	static
 	char	buf [BUFSIZE];
-	long	len = 0;		/* length of the test file	*/
+	double	len = 0;		/* length of the test file	*/
 	int	rc;
 	double	tr, tc;
 	int	i;
-	long	maxlen;
 	int 	nr_seeks;
 
 	(*argvp)++;
@@ -120,6 +136,10 @@ void diskbench (char ***argvp)
 		testfile = (**argvp);
 		(*argvp)++;
 	}
+
+	#ifdef SIGXFSZ
+	    signal(SIGXFSZ, SIG_IGN);
+	#endif
 
 
         /* First get a rough estimate on the speed of the
@@ -132,27 +152,6 @@ void diskbench (char ***argvp)
 	}
         if (verbose) printf ("Disk Bench:\n");
         else printf ("disk	| ");
-        if (verbose) printf ("Calibrating ...\n");
-        resettimer ();
-	if ((fd = open (testfile, OFLAGS, 0666)) == -1) {
-		printf ("Oops ! I cannot create the test file\nOS says : \"%s\"\n", strerror (errno));
-			return;
-	}
-
-	while ((rc = write (fd, buf, BUFSIZE)) > 0) {
-		len += rc;
-		gettimer (&tr, &tc);
-		if (tr > 5.0) break;
-	}
-	close (fd);
-	remove(testfile);
-
-	/* The real test should take about 1 minute */
-	maxlen = len * 60.0 / tr > LONG_MAX
-			? LONG_MAX
-			: len * 60.0 / tr;
-
-
         /* Write test
          */
         if (verbose) printf ("Write test ...\n");
@@ -163,22 +162,26 @@ void diskbench (char ***argvp)
 	}
 
 	len = 0;
-	while (len < maxlen && (rc = write (fd, buf, BUFSIZE)) > 0) {
+	while (tr <= 60 && (rc = write (fd, buf, BUFSIZE)) > 0) {
 	    if (verbose) putchar('.');
 	    len += rc;
+	    gettimer (&tr, &tc);
 	}
+	if (verbose) printf("F");
+	fsync(fd);
+	if (verbose) printf("C");
 	close (fd);
-	if (verbose) printf("C\n");
+	if (verbose) printf("\n");
 
 	gettimer (&tr, &tc);
 
 	if (verbose) {
-		printf ("\n%ld bytes written in %g seconds (%g bytes / second)\n",
+		printf ("\n%g bytes written in %g seconds (%g bytes / second)\n",
 			len, tr,
 			tr != 0 ? len/tr : 0.0 );
 		printf ("CPU time: %g\n", tc);
 	} else {
-		printf ("%ld	| %g	| %g 	| %g	| ",
+		printf ("%g	| %g	| %g 	| %g	| ",
 			len, tr, tc, 
 			tr != 0 ? len/tr : 0.0 );
 	}
@@ -200,12 +203,12 @@ void diskbench (char ***argvp)
         gettimer (&tr, &tc);
 
 	if (verbose) {
-		printf ("\n%ld bytes read in %g seconds (%g bytes / second)\n",
+		printf ("\n%g bytes read in %g seconds (%g bytes / second)\n",
 			len, tr,
 			tr != 0 ? len/tr : 0.0 );
 		printf ("CPU time: %g\n", tc);
 	} else {
-		printf ("%ld	| %g	| %g 	| %g	| ",
+		printf ("%g	| %g	| %g 	| %g	| ",
 			len, tr, tc, 
 			tr != 0 ? len/tr : 0.0 );
 	}
