@@ -22,7 +22,7 @@ int main(void) {
 	    if (difftime(t1, t0) >= 60) {
 		printf("%ld %.0f %.0f nps\n",
 		       n, difftime(t1, t0), n/difftime(t1, t0));
-		exit(0);
+		return 0;
 	    }
 	}
 	if (n == ts) printf("%ld %ld\n", n, ts);
