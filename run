@@ -1,0 +1,21 @@
+#!/bin/sh
+
+./bench id "`uname -a`" \
+	disk screen sieve mandelbrot tree \
+	> single.out
+
+(
+	mkdir a && cd a &&  \
+	../bench id "`uname -a`" \
+		disk screen sieve mandelbrot tree && \
+	rm -rf a \
+) > double1.out &
+
+
+(
+	mkdir b && cd b &&  \
+	../bench id "`uname -a`" \
+		disk screen sieve mandelbrot tree && \
+	rm -rf b \
+) > double2.out &
+

@@ -1,0 +1,21 @@
+Computer           |OS              |Compiler     |Library                    |Time (s)|Step
+~~~~~~~~           |~~              |~~~~~~~~     |~~~~~~~                    |~~~~~~~~|~~~~
+DEC Alpha 3000/300 |OSF 1.3         |cc -O2       |                           |0.05|0.04
+DEC Alpha 3000/300 |OSF 1.3         |gcc 2.5.8 -O2|                           |0.05|0.04
+DECstation 5000/120|Ultrix 4.2A     |c89 -O2      |                           |0.50?|0.04
+DECstation 5000/120|Ultrix 4.2A     |gcc 2.3.3 -O2|                           |0.45?|0.04
+Escom 386-25       |MS-DOS 3.2?     |Turbo C      |                           |190|0.04
+Escom 386-25       |Minix 1.6.16    |ccc 4.2      |c386fp + bccfp             |74.85|0.04
+Escom 386-25       |Minix 1.6.16    |gcc 2.2.2    |floatlib (single precision)|57|0.04
+Escom 386-25       |Minix 1.6.16    |gcc 2.2.2    |floatlib (single precision)|60.5|0.04
+Escom 386-25       |Minix 1.6.16 VM |ccc 4.2      |c386fp + bccfp             |88|0.04
+Escom 386-25       |Minix 1.6.25 VM |ccc 4.3      |c386fp + bccfp             |68|0.04
+Escom 386-25       |Minix 1.6.25 VM |gcc 2.3.3    |vu                         |115|0.04
+Escom 386-25       |VMD Minix 1.6.25|gcc 2.4.5 -O2|                           |100|0.04
+Escom 386-25       |ix/386          |cc           |                           |320|0.04
+Escom 386-25       |VMD Minix 1.6.25|gcc 2.4.5 -O2|bccfp                      |42|0.04
+Escom 386-25       |MS-DOS 6.0      |Turbo C++ 1.0|                           |173|0.04
+HP 9000/897	   |HP-UX 9.04	    |gcc 2.6.3 -O2|			      |0.1|0.04
+Pentium 90	   |Linux 1.2.5	    |gcc 2.5.8 -O2|			      |0.1|0.04
+Pentium 90	   |Linux 1.2.5	    |gcc 2.7.0 -O6|			      |24|0.0025
+Pentium 90	   |Linux 1.3.37 SMP|gcc 2.7.0 -O6|			      |24|0.0025

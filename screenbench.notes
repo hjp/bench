@@ -1,0 +1,15 @@
+Computer         ³OS             ³Driver          ³Compiler ³Library      ³Speed (cps)
+~~~~~~~~         ³~~             ³~~~~~~          ³~~~~~~~~ ³~~~~~~~      ³~~~~~~~~~~~
+Schneider PC 1512³MS-DOS 3.2     ³                ³Turbo C  ³conio        ³740
+Escom 386-25     ³MS-DOS 3.3     ³                ³Turbo C  ³stdio        ³1100
+Escom 386-25     ³MS-DOS 3.3     ³ansi.sys        ³Turbo C  ³stdio        ³720
+Escom 386-25     ³MS-DOS 3.3     ³nnansi.sys      ³Turbo C  ³stdio        ³3300
+Escom 386-25     ³ix/386         ³                ³cc       ³stdio        ³5000
+Escom 386-25     ³Minix 1.3      ³                ³ack      ³stdio        ³17000
+Escom 386-25     ³Minix 1.5      ³                ³ack      ³stdio        ³32000
+Escom 386-25     ³Minix-386      ³                ³ack      ³stdio        ³30000
+Escom 386-25     ³Minix 1.6.16   ³Virtual consoles³ccc 4.2  ³estdio 2.1   ³17100
+Escom 386-25     ³Minix 1.6.16   ³Virtual consoles³gcc 2.2.2³estdio 2.1   ³18300
+Escom 386-25     ³Minix 1.6.25 VM³                ³gcc 2.4.5³4.4 bsd stdio³22000
+Pentium 90	 |Linux 1.2.5    |XF86 3.1.1 xterm|gcc 2.5.8|stdio	  |45500
+Pentium 90	 |Linux 1.3.37 SMP|XF86 3.1.1 xterm|gcc 2.7.0|stdio	  |44000

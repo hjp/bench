@@ -1,0 +1,38 @@
+Throughputs for diskbench.c:
+
+Computer           |OS              |Driver  |Disk       |Write  |Read   |Seeks|File|Memory
+--------           |--              |------  |----       |-----  |----   |-----|----|------
+Amstrad PC 1512    |MS-DOS 3.21     |        |20 MB HD   |23700  |25800  |     |    |
+Amstrad PC 1512    |MS-DOS 3.21     |        |5.25" 360k |12400  |18400  |     |    |
+Escom 386-25       |PC-DOS 3.3      |        |NEC 66 MB  |251900 |367900 |     |    |
+Escom 386-25       |PC-DOS 3.3      |        |5.25" 360k |13600  |15800  |     |    |
+Escom 386-25       |PC-DOS 3.3      |        |3.5" 720k  |12200  |13200  |     |    |
+Escom 386-25       |PC-DOS 3.3      |        |5.25" 1.2M |21100  |31500  |     |    |
+Escom 386-25       |ix/386          |        |NEC 66 MB  |167000 |320000 |     |    |
+Escom 386-25       |MINIX 1.3       |at_wini |NEC 66 MB  |25000  |105000 |     |    |
+Escom 386-25       |MINIX 1.5       |at_wini |NEC 66 MB  |42000  |75000  |     |    |
+Escom 386-25       |MINIX 1.5 386   |at_wini |NEC 66 MB  |56000  |65000  |     |    |
+Escom 386-25       |MINIX 1.5 386   |wjb     |NEC 66 MB  |53800  |153000 |     |    |
+Escom 386-25       |MINIX 1.6.16 386|wjb     |NEC 66 MB  |41300  |203000 |     |    |
+Escom 386-25       |MINIX 1.6.16 VM |        |NEC 66 MB  |143000 |253000 |     |    |
+Escom 386-25       |MINIX 1.6.16 VM |        |3.5" 1.44MB|36600  |29700  |     |    |
+Escom 386-25       |MINIX 1.6.25 VM |aha_scsi|DEC 1GB    |320000 |540000 |56   |16MB|8MB
+Escom 386-25       |MINIX 1.6.25 VM |        |NEC 66 MB  |220000 |170000 |33   |16MB|8MB
+Escom 386-25       |MINIX 1.6.25 VM |aha_scsi|DEC 1GB    |340000 |530000 |54   |    |
+VDS 486-33         |Linux 0.99.13   |        |DEC 200MB  |350000 |350000 |37   |16MB|4MB
+DECstation 5000/120|Ultrix 4.2      |        |DEC 1GB    |490000 |880000 |50   |16MB|32MB
+DECstation 5000/120|Ultrix 4.2      |        |DEC 1.3GB  |410000 |650000 |50   |16MB|32MB
+DEC Alpha 3000/600 |OSF/1 1.3       |        |?          |2600000|3700000|190  |64MB|64MB?
+Escom 386-25       |MS-DOS 6.0      |        |DEC 1GB    |1000000|470000 |4    |64MB|8MB
+Escom 386-25       |MS-DOS 6.0      |smartdrv|DEC 1GB    | 630000|390000 |6    |64MB|8MB
+HP 9000/897	   |HP-UX 9.04	    |	     |?		 |2791550|412520 |90   |32MB|288MB
+HP 9000/897	   |HP-UX 9.04	    |	     |RAID,3 disks @2GB, level 3|1069293|986895 |138   |32MB|288MB
+HP 9000/897	   |HP-UX 9.04	    |NFS     |HP 9000/847, HP-UX 9.00|62000|480000 |70   |16MB|64MB
+Pentium 90	   |Linux 1.2.5	    |ext2    |Quantum 730 MB, Adaptec 2940|2.62E6|2.16E6|61|64MB|32MB
+Escom 386-25	   |Linux 1.2.5	    |ext2    |DEC 1GB, Adaptec 1542B|460E3|577E3|42|64MB|8MB
+Pentium 90	   |Linux 1.2.5	    |ext2    |Quantum 730 MB, Adaptec 2940|2.82E6|1.94E6|121|32MB|32MB
+Pentium 90	   |Linux 1.2.5	    |ext2    |Quantum 730 MB, Adaptec 2940|2.92E6|2.34E6|66|99MB|32MB
+Pentium 90	   |Linux 1.3.37 SMP|ext2    |Quantum 730 MB, Adaptec 2940|3.26E6|2.91E6|65|99MB|32MB
+Pentium 90	   |Linux 1.3.37 SMP|ext2    |Quantum 730 MB, Adaptec 2940|3.29E6|2.84E6|66|99MB|32MB
+Pentium 90	   |Linux 1.3.37 SMP|ext2    |Quantum 730 MB, Adaptec 2940|2.35E6|580000|?|12MB|32MB
+Pentium 90	   |Linux 1.3.37 SMP|ext2    |Quantum 730 MB, Adaptec 2940|2.57E6|690000|48|90MB|32MB
