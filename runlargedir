@@ -3,7 +3,7 @@ d=`dirname $0`
 n=2
 while true
 do
-    $d/largedir $n | tee -a largedir.out
+    $d/largedir -l $n | tee -a largedir.out
     let n="$n*3/2"
 done
 
