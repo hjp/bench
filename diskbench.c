@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.5 2002-10-01 18:13:23 hjp Exp $";
+	"$Id: diskbench.c,v 1.6 2003-01-31 11:50:11 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,11 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.5  2002-10-01 18:13:23  hjp
+ * Revision 1.6  2003-01-31 11:50:11  hjp
+ * Changed verbose progress report from 1 dot per block to 1 line of
+ * timing info per second.
+ *
+ * Revision 1.5  2002/10/01 18:13:23  hjp
  * Added large file support on systems which know O_LARGEFILE
  *
  * Fsync file after writing. This should make read performance somewhat
@@ -126,6 +130,7 @@ void diskbench (char ***argvp)
 	double	len = 0;		/* length of the test file	*/
 	int	rc;
 	double	tr, tc;
+	int	ltr = 0;	/* last value of tr (rounded down to seconds */
 	int	i;
 	int 	nr_seeks;
 
@@ -163,9 +168,14 @@ void diskbench (char ***argvp)
 
 	len = 0;
 	while (tr <= 60 && (rc = write (fd, buf, BUFSIZE)) > 0) {
-	    if (verbose) putchar('.');
 	    len += rc;
 	    gettimer (&tr, &tc);
+	    if (verbose && (int)tr != ltr) {
+		printf ("%g bytes written in %g seconds (%g bytes / second)\n",
+			len, tr,
+			tr != 0 ? len/tr : 0.0 );
+		ltr = tr;
+	    }
 	}
 	if (verbose) printf("F");
 	fsync(fd);
@@ -176,7 +186,7 @@ void diskbench (char ***argvp)
 	gettimer (&tr, &tc);
 
 	if (verbose) {
-		printf ("\n%g bytes written in %g seconds (%g bytes / second)\n",
+		printf ("%g bytes written in %g seconds (%g bytes / second)\n",
 			len, tr,
 			tr != 0 ? len/tr : 0.0 );
 		printf ("CPU time: %g\n", tc);
