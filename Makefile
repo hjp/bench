@@ -10,7 +10,7 @@ fileserial: fileserial.o timer.o
 	$(CC) -o $@ $^
 
 clean:
-	rm -f bench *.o core *.i
+	rm -f bench *.o core *.i fileserial largedir
 
 distclean: clean
 	rm -f *.d
