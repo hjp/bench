@@ -1,0 +1,14 @@
+#!/bin/sh 
+if [ $# -ne 2 ]
+then
+    echo "Usage: $0 device file" >&2
+    exit 1;
+fi
+./diskbench $1 > $2
+gnuplot <<EOF
+ set data style impulses
+ set grid
+ set term png color
+ set output "$2.png"
+ plot "$2" using 1:4
+EOF
