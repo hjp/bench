@@ -20,6 +20,8 @@ static void usage(void) {
 
 int main(int argc, char **argv) {
     int i;
+    int c;
+    int rc = 0;
 
 
     cmnd = argv[0];
@@ -28,7 +30,18 @@ int main(int argc, char **argv) {
 	usage();
     }
 
-    for (i = 1; i < argc; i++) {
+    while ((c = getopt(argc, argv, "l")) != EOF) {
+	switch(c) {
+	    case 'l':
+		setbuf(stdout, NULL);
+		break;
+	    case '?':
+		usage();
+	    default:
+		assert(0);
+	}
+    }
+    for (i = optind; i < argc; i++) {
 	char dirname[1024];
 	struct timeval tv;
 	double t0, t1;
@@ -63,7 +76,8 @@ int main(int argc, char **argv) {
 	    if ((fd = open(filename, O_CREAT | O_WRONLY, 0666)) == -1) {
 		fprintf(stderr, "%s: open(%s, O_CREAT | O_WRONLY) failed: %s\n",
 			argv[0], filename, strerror(errno));
-		exit(1);
+		n = j;
+		rc = 1;
 	    }
 	    close(fd);
 	}
@@ -142,6 +156,6 @@ int main(int argc, char **argv) {
 	}
     }
 
-    return 0;
+    return rc;
 
 }
