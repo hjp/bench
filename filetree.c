@@ -11,7 +11,7 @@
 #include "bench.h"
 #include "filetree.h"
 
-#define LEVELS 6
+#define LEVELS 5
 #define SUBDIRS 5
 #define FILES 5
 #define FILESIZE 1000
@@ -24,7 +24,10 @@ int files = 0;
 static void createtree (const char *dirname, int levels) {
 	int	i;
 	FILE	*fp;
+	double	tr, tc;
 
+        gettimer (&tr, &tc);
+	if (tr > 60) return;
 	if (mkdir (dirname, 0777) == -1) {
 		int e = errno;
 		fprintf (stderr, "createtree: cannot make directory %s: %s\n",
