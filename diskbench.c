@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.1 1996-01-04 11:20:30 hjp Exp $";
+	"$Id: diskbench.c,v 1.2 1998-02-21 18:58:38 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,8 +12,11 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.1  1996-01-04 11:20:30  hjp
- * Initial revision
+ * Revision 1.2  1998-02-21 18:58:38  hjp
+ * fixed typo in diskbench.c
+ * Added shell script to run disk benches.
+ *
+ * Revision 1.1.1.1  1996/01/04  11:20:31  hjp
  *
  * Revision 1.2  1996/01/03  23:13:25  hjp
  * Changed usage from menu- to commandline-driven.
@@ -266,7 +269,7 @@ void diskbench (char ***argvp)
         gettimer (&tr, &tc);
 
 	if (verbose) {
-		printf ("\n%d seeks in %g seconds (%g bytes / second)\n",
+		printf ("\n%d seeks in %g seconds (%g seeks / second)\n",
 			nr_seeks, tr,
 			tr != 0 ? nr_seeks/tr : 0.0 );
 		printf ("CPU time: %g\n", tc);
