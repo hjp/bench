@@ -1,5 +1,6 @@
 #!/bin/sh
+dir=`dirname $0`
 fs=`df -P . | awk 'NR == 2 {print $NF}'`
 mountinfo=`mount | grep "^$fs "`
-`dirname $0`/bench id "`uname -a`
-$mountinfo" verbose disk tree | tee `hostname`.`date '+%Y-%m-%d:%H:%M:%S'`
+$dir/bench id "`uname -a`
+$mountinfo" verbose disk tree | tee $dir/`hostname`.`date '+%Y-%m-%d:%H:%M:%S'`

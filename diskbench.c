@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.8 2003-10-06 16:08:44 hjp Exp $";
+	"$Id: diskbench.c,v 1.9 2003-10-24 10:22:49 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,10 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.8  2003-10-06 16:08:44  hjp
+ * Revision 1.9  2003-10-24 10:22:49  hjp
+ * Added parameter maxlen to restrict length of test file.
+ *
+ * Revision 1.8  2003/10/06 16:08:44  hjp
  * 64 bit seeks.
  *
  * Revision 1.7  2003/01/31 12:07:19  hjp
@@ -137,6 +140,7 @@ void diskbench (char ***argvp)
 	char	*testfile = "diskbench.tmp";
 	static
 	char	buf [BUFSIZE];
+	double	maxlen = DBL_MAX;	/* max length of the test file	*/
 	double	len = 0;		/* length of the test file	*/
 	int	rc;
 	double	tr, tc;
@@ -146,20 +150,26 @@ void diskbench (char ***argvp)
 
 	(*argvp)++;
 
-	if (**argvp && strcmp(**argvp, "filename") == 0) {
-		(*argvp)++;
-		testfile = (**argvp);
-		(*argvp)++;
+	for (;;) {
+		if (!**argvp) break;
+
+		if (strcmp(**argvp, "filename") == 0) {
+			(*argvp)++;
+			testfile = (**argvp);
+			(*argvp)++;
+		} else if (strcmp(**argvp, "maxlen") == 0) {
+			(*argvp)++;
+			maxlen = strtod(**argvp, NULL);
+			(*argvp)++;
+		} else {
+			break;
+		}
 	}
 
 	#ifdef SIGXFSZ
 	    signal(SIGXFSZ, SIG_IGN);
 	#endif
 
-
-        /* First get a rough estimate on the speed of the
-         * device by writing a file for 5 seconds.
-         */
 
         if (id) {
 		if (verbose) printf ("System: %s\n", id);
@@ -178,7 +188,7 @@ void diskbench (char ***argvp)
 
 	len = 0;
 	tr = 0;
-	while (tr <= 60 && (rc = write (fd, buf, BUFSIZE)) > 0) {
+	while (tr <= 60 && len < maxlen && (rc = write (fd, buf, BUFSIZE)) > 0) {
 	    len += rc;
 	    gettimer (&tr, &tc);
 	    if (verbose && (int)tr != ltr) {
