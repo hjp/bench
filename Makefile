@@ -9,6 +9,8 @@ bench: bench.o diskbench.o screenbench.o sieve.o floatbench.o getch.o \
 fileserial: fileserial.o timer.o
 	$(CC) -o $@ $^
 
+largedir: largedir.o
+
 clean:
 	rm -f bench *.o core *.i fileserial largedir
 
