@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.3 2000-06-12 21:56:17 hjp Exp $";
+	"$Id: diskbench.c,v 1.4 2001-03-07 15:42:55 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,12 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.3  2000-06-12 21:56:17  hjp
+ * Revision 1.4  2001-03-07 15:42:55  hjp
+ * Use GNUmake*s in Makefile
+ * Use dirname of rundisk to determine path of bench
+ * Removed <sys/stat.h> from diskbench.c for no apparent reason.
+ *
+ * Revision 1.3  2000/06/12 21:56:17  hjp
  * *** empty log message ***
  *
  * Revision 1.2  1998/02/21 18:58:38  hjp
@@ -60,7 +65,6 @@ char diskbench_c_rcs_id [] =
 
 #include <sys/types.h>
 #include <fcntl.h>
-#include <sys/stat.h>
 #include "unixio.h"
 #include "timer.h"
 

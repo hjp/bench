@@ -1,9 +1,5 @@
-#CC = gcc -Wall -fsoft -MD
-CC = gcc -Wall -MD
-#CC = acc
-#CC = cc
-#CC = c89
-CFLAGS = -O6 -D_HPUX_SOURCE
+include GNUmakevars
+
 bench: bench.o diskbench.o screenbench.o sieve.o floatbench.o getch.o \
 filetree.o timer.o fadd.o
 	$(CC) -o $@ $^
@@ -15,3 +11,5 @@ distclean: clean
 	rm -f *.d
 
 -include *.d
+
+include GNUmakerules
