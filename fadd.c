@@ -21,7 +21,7 @@ void faddbench (char ***argvp)
 		else printf ("%s	| ", id);
 	}
         if (verbose) printf ("Fadd Bench:\n");
-        else printf ("mandelbrot	| ");
+        else printf ("fadd	| ");
 
 	(*argvp)++;
 
