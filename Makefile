@@ -1,6 +1,6 @@
 include GNUmakevars
 
-all: bench fileserial largedir
+all: bench fileserial largedir writebench
 
 bench: bench.o diskbench.o screenbench.o sieve.o floatbench.o getch.o \
     filetree.o timer.o fadd.o
