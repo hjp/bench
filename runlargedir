@@ -1,9 +1,12 @@
 #!/bin/sh
 d=`dirname $0`
 n=2
+stop=`date -d '30 minutes' '+%s'`
 while true
 do
-    $d/largedir -l $n | tee -a largedir.out
+    $d/largedir -l $n >> largedir.out
+    [ $? -ne 0 ] && exit
+    [ "`date '+%s'`" -gt "$stop" ] && exit
     let n="$n*3/2"
 done
 
