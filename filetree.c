@@ -50,7 +50,7 @@ static void createtree (const char *dirname, int levels) {
 		if ((fp = fopen (newfile, "wb")) == NULL) {
 			fprintf (stderr, "createtree: cannot open file %s: %s\n",
 				 newfile, strerror (errno));
-			return;
+			continue;
 		}
 		files++;
 		if (fwrite (buffer, 1, FILESIZE, fp) != FILESIZE) {
