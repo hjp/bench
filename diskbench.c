@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.7 2003-01-31 12:07:19 hjp Exp $";
+	"$Id: diskbench.c,v 1.8 2003-10-06 16:08:44 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,10 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.7  2003-01-31 12:07:19  hjp
+ * Revision 1.8  2003-10-06 16:08:44  hjp
+ * 64 bit seeks.
+ *
+ * Revision 1.7  2003/01/31 12:07:19  hjp
  * Added largefile support (for real this time).
  *
  * Revision 1.6  2003/01/31 11:50:11  hjp
@@ -109,9 +112,9 @@ char diskbench_c_rcs_id [] =
 #endif
 
 
-long lrand (long limit) {
+double drand (double limit) {
 	double	fact = limit / ((double) RAND_MAX + 1);
-	long	rv = rand () * fact;
+	double	rv = rand () * fact;
 	return rv;
 }
 
@@ -174,6 +177,7 @@ void diskbench (char ***argvp)
 	}
 
 	len = 0;
+	tr = 0;
 	while (tr <= 60 && (rc = write (fd, buf, BUFSIZE)) > 0) {
 	    len += rc;
 	    gettimer (&tr, &tc);
@@ -236,18 +240,18 @@ void diskbench (char ***argvp)
         if (verbose) printf ("Calibrating ...\n");
         resettimer ();
 
-	if ((fd = open (testfile, O_RDONLY)) == -1) {
+	if ((fd = open (testfile, ORFLAGS)) == -1) {
 		printf ("Oops ! I cannot open the test file\n"
 			"DOS says : \"%s\"\n", strerror (errno));
 		return;
 	}
 
 	for (i = 0, tr = 0; tr < 5.0; i ++) {
-		long	pos = lrand (len);
+		off64_t	pos = drand (len);
 
-		if (lseek (fd, pos, SEEK_SET) < 0) {
+		if (lseek64(fd, pos, SEEK_SET) < 0) {
 			printf ("cannot seek to position %ld\n"
-			"DOS says : \"%s\"\n", (long)pos, strerror (errno));
+			"OS says : \"%s\"\n", (long)pos, strerror (errno));
 		}
 		if ((rc = read (fd, buf, 1)) != 1) {
 			if (rc == 0) { 
@@ -255,7 +259,7 @@ void diskbench (char ***argvp)
 					(long)pos);
 			} else {
 				printf ("read error at position %ld\n"
-				"DOS says : \"%s\"\n", (long)pos, strerror (errno));
+				"OS says : \"%s\"\n", (long)pos, strerror (errno));
 			}
 		}
 		gettimer (&tr, &tc);
@@ -272,17 +276,17 @@ void diskbench (char ***argvp)
         if (verbose) printf ("Seek test ...\n");
         resettimer ();
 
-	if ((fd = open (testfile, O_RDONLY)) == -1) {
+	if ((fd = open (testfile, ORFLAGS)) == -1) {
 		printf ("Oops ! I cannot open the test file\n"
 			"DOS says : \"%s\"\n", strerror (errno));
 		return;
 	}
 	for (i = 0; i < nr_seeks; i ++) {
-		long	pos = lrand (len);
+		off64_t	pos = drand (len);
 
-		if (lseek (fd, pos, SEEK_SET) < 0) {
+		if (lseek64 (fd, pos, SEEK_SET) < 0) {
 			printf ("cannot seek to position %ld\n"
-			"DOS says : \"%s\"\n", (long)pos, strerror (errno));
+			"OS says : \"%s\"\n", (long)pos, strerror (errno));
 		}
 		if ((rc = read (fd, buf, 1)) != 1) {
 			if (rc == 0) { 
@@ -290,7 +294,7 @@ void diskbench (char ***argvp)
 					(long)pos);
 			} else {
 				printf ("read error at position %ld\n"
-				"DOS says : \"%s\"\n", (long)pos, strerror (errno));
+				"OS says : \"%s\"\n", (long)pos, strerror (errno));
 			}
 		}
 	}
