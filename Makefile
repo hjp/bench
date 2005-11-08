@@ -1,4 +1,3 @@
-include GNUmakevars
 
 all: bench fileserial largedir writebench
 
@@ -19,5 +18,3 @@ distclean: clean
 
 
 -include *.d
-
-include GNUmakerules
