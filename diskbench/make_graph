@@ -5,10 +5,22 @@ then
     exit 1;
 fi
 ./diskbench $1 > $2
-gnuplot <<EOF
- set data style impulses
- set grid
- set term png color
- set output "$2.png"
- plot "$2" using 1:4
-EOF
+if gnuplot --version | grep '^gnuplot 4' 
+then
+    gnuplot <<'    EOF'
+     set data style dots
+     set grid
+     set term png size 800,600
+     set output "$2.png"
+     plot "$2" using 1:4
+    EOF
+else
+    gnuplot <<'    EOF'
+     set data style dots
+     set grid
+     set term png color
+     set output "$2.png"
+     plot "$2" using 1:4
+    EOF
+fi
+
