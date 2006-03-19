@@ -1,1 +1,2 @@
+CFLAGS = -g
 all: diskbench
