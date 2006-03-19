@@ -40,16 +40,17 @@ int main(int argc, char **argv) {
 		break;
 	    case 'b':
 		blocksize = strtoul(optarg, NULL, 0);
-		buf = malloc(blocksize);
-		if (!buf) {
-		    fprintf(stderr, "%s: cannot malloc %ul bytes for buffer\n", argv[0], (unsigned long)blocksize);
-		    exit(1);
-		}
+		break;
 	    case '?':
 		usage();
 	    default:
 		assert(0);
 	}
+    }
+    buf = malloc(blocksize);
+    if (!buf) {
+	fprintf(stderr, "%s: cannot malloc %ul bytes for buffer\n", argv[0], (unsigned long)blocksize);
+	exit(1);
     }
     if (random) {
 	for (i = 0; i < blocksize; i++) {
@@ -68,7 +69,7 @@ int main(int argc, char **argv) {
 	}
 	for (off = 0; ; off += rc) {
 	    gettimeofday(&tv0, NULL);
-	    rc = write(fd, buf, sizeof(buf));
+	    rc = write(fd, buf, blocksize);
 	    gettimeofday(&tv1, NULL);
 	    if (rc <= 0) break;
 
@@ -84,7 +85,7 @@ int main(int argc, char **argv) {
 	}
 	for (off = 0; ; off += rc) {
 	    gettimeofday(&tv0, NULL);
-	    rc = read(fd, buf, sizeof(buf));
+	    rc = read(fd, buf, blocksize);
 	    gettimeofday(&tv1, NULL);
 	    if (rc <= 0) break;
 
