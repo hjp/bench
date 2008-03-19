@@ -9,7 +9,7 @@
 char *cmnd;
 
 void usage(void) {
-        fprintf(stderr, "Usage: %s -p maxproc -w maxwork\n", cmnd);
+        fprintf(stderr, "Usage: %s n\n", cmnd);
         exit(1);
 }
 
@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
 	int f = 0;
 	int s = 0;
 	struct timeval tv0, tv1;
+	cmnd = argv[0];
 
 	if (argc == 2) {
 		n = strtoul(argv[1], NULL, 0);
