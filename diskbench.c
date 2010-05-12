@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.10 2004-04-05 19:41:29 hjp Exp $";
+	"$Id: diskbench.c,v 1.11 2010-05-12 13:08:49 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,7 +12,10 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
- * Revision 1.10  2004-04-05 19:41:29  hjp
+ * Revision 1.11  2010-05-12 13:08:49  hjp
+ * no real change
+ *
+ * Revision 1.10  2004/04/05 19:41:29  hjp
  * include float.h for DBL_MAX (how often?)
  * shut up gcc.
  * be more friendly to other processes.
