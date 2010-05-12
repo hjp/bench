@@ -4,18 +4,23 @@ then
     echo "Usage: $0 device file" >&2
     exit 1;
 fi
-./diskbench $1 > $2
+
+if [ ! -f "$2" ]
+then
+    ./diskbench "$1" > "$2"
+fi
+
 if gnuplot --version | grep '^gnuplot 4' 
 then
-    gnuplot <<'    EOF'
+    gnuplot <<EOF
      set data style dots
      set grid
      set term png size 800,600
      set output "$2.png"
      plot "$2" using 1:4
-    EOF
+EOF
 else
-    gnuplot <<'    EOF'
+    gnuplot <<"    EOF"
      set data style dots
      set grid
      set term png color
