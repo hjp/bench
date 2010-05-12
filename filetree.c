@@ -176,8 +176,10 @@ static void removetree (const char *dirname) {
 
 
 void filetree (char ***argvp) {
-	double tr, tc;
+	double tr, tc, tt;
 	char cwd[PATH_MAX];
+	int levels;
+
 
         (*argvp)++;
 
@@ -194,55 +196,60 @@ void filetree (char ***argvp) {
         	return;
 	}
 
-        resettimer ();
+	for (levels = LEVELS, tt = 0; tt < 20; levels++) {
+		resettimer ();
 
-	dirs = files = 0;
-	createtree ("ft", LEVELS);
+		dirs = files = 0;
+		createtree ("ft", levels);
 
-        gettimer (&tr, &tc);
+		gettimer (&tr, &tc);
+		tt += tr;
 
-	if (verbose) {
-		printf ("\ntree (%d levels, %d directories, %d files) created in %g seconds\n",
-			LEVELS, dirs, files,
-			tr);
-		printf ("CPU time: %g seconds\n", tc);
-	} else {
-		printf ("%d	| %d	| %d	| %g	| %g	| ",
-			LEVELS, dirs, files,
-			tr, tc);
+		if (verbose) {
+			printf ("\ntree (%d levels, %d directories, %d files) created in %g seconds\n",
+				levels, dirs, files,
+				tr);
+			printf ("CPU time: %g seconds\n", tc);
+		} else {
+			printf ("%d	| %d	| %d	| %g	| %g	| ",
+				levels, dirs, files,
+				tr, tc);
+		}
+
+		if (chdir(cwd) == -1) {
+			fprintf (stderr, "filetree: cannot change to %s: %s\n", cwd, strerror(errno));
+			return;
+		}
+
+		resettimer ();
+		readtree ("ft");
+		gettimer (&tr, &tc);
+		tt += tr;
+
+		if (verbose) {
+			printf ("\ntree read in %g seconds\n", tr);
+			printf ("CPU time: %g seconds\n", tc);
+		} else {
+			printf("%g	| %g	| ", tr, tc);
+		}
+
+		if (chdir(cwd) == -1) {
+			fprintf (stderr, "filetree: cannot change to %s: %s\n", cwd, strerror(errno));
+			return;
+		}
+
+		resettimer ();
+		removetree ("ft");
+		gettimer (&tr, &tc);
+		tt += tr;
+
+		if (verbose) {
+			printf ("\ntree removed in %g seconds\n", tr);
+			printf ("CPU time: %g seconds\n", tc);
+		} else {
+			printf("%g	| %g	| ", tr, tc);
+		}
+		printf("\n");
 	}
-
-        if (chdir(cwd) == -1) {
-        	fprintf (stderr, "filetree: cannot change to %s: %s\n", cwd, strerror(errno));
-        	return;
-        }
-
-	resettimer ();
-	readtree ("ft");
-        gettimer (&tr, &tc);
-
-	if (verbose) {
-		printf ("\ntree read in %g seconds\n", tr);
-		printf ("CPU time: %g seconds\n", tc);
-	} else {
-		printf("%g	| %g	| ", tr, tc);
-	}
-
-        if (chdir(cwd) == -1) {
-        	fprintf (stderr, "filetree: cannot change to %s: %s\n", cwd, strerror(errno));
-        	return;
-        }
-
-        resettimer ();
-	removetree ("ft");
-        gettimer (&tr, &tc);
-
-	if (verbose) {
-		printf ("\ntree removed in %g seconds\n", tr);
-		printf ("CPU time: %g seconds\n", tc);
-	} else {
-		printf("%g	| %g	| ", tr, tc);
-	}
-	printf("\n");
 
 }
