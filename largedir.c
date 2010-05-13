@@ -14,7 +14,7 @@
 static char *cmnd;
 
 static void usage(void) {
-    fprintf(stderr, "Usage: %s number_of_files ...\n", cmnd);
+    fprintf(stderr, "Usage: %s [-l] [-s size] number_of_files ...\n", cmnd);
     exit(1);
 }
 
@@ -23,6 +23,8 @@ int main(int argc, char **argv) {
     int i;
     int c;
     int rc = 0;
+    unsigned long size;
+    void *buf;
 
 
     cmnd = argv[0];
@@ -31,11 +33,15 @@ int main(int argc, char **argv) {
 	usage();
     }
 
-    while ((c = getopt(argc, argv, "l")) != EOF) {
+    while ((c = getopt(argc, argv, "ls:")) != EOF) {
 	switch(c) {
 	    case 'l':
 		setbuf(stdout, NULL);
 		break;
+            case 's':
+                size = strtoul(optarg, NULL, 0);
+                buf = malloc(size);
+                break;
 	    case '?':
 		usage();
 	    default:
@@ -80,6 +86,22 @@ int main(int argc, char **argv) {
 		n = j;
 		rc = 1;
 	    }
+            if (size) {
+                ssize_t rc = write(fd, buf, size);
+                if (rc == -1) {
+                    fprintf(stderr, "%s: write([%s], buf, %lu) failed: %s\n",
+                            argv[0], filename, size, strerror(errno));
+                    n = j;
+                    rc = 1;
+                    unlink(filename);
+                } else if (rc != size) {
+                    fprintf(stderr, "%s: write([%s], buf, %lu) returned %ld\n",
+                            argv[0], filename, size, (unsigned long)rc);
+                    n = j;
+                    rc = 1;
+                    unlink(filename);
+                }
+            }
 	    close(fd);
 	}
 		
@@ -115,6 +137,9 @@ int main(int argc, char **argv) {
 	    snprintf(filename, sizeof(filename), "%d", p[j]);
 	    /* printf("filename = %s\n", filename); */
 	    fd = open(filename, O_RDONLY);
+            if (size) {
+                read(fd, buf, size);
+            }
 	    close(fd);
 	}
 		
