@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+use Time::HiRes qw(gettimeofday);
+
+
+my @fifo;
+
+
+for my $depth (1, 10, 100, 1000, 10000) {
+    @fifo = (1) x $depth;
+    my $t0 = gettimeofday;
+    my $t1 = $t0 + 2;
+    my $t2;
+    my $n = 0;
+    while (($t2 = gettimeofday) < $t1) {
+	push @fifo, 2;
+	pop @fifo;
+	$n++;
+    }
+    printf "%d push/pops in %f seconds. %f per second\n", $n, ($t2 - $t0), $n / ($t2 - $t0);
+}
