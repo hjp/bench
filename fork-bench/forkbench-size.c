@@ -15,10 +15,6 @@ void usage(void) {
 }
 
 int main(int argc, char **argv) {
-        int i;
-	int n = 1;
-	int f = 0;
-	int s = 0;
         void *p = NULL;
         size_t last_size = 0;
         char **arg;
@@ -46,6 +42,12 @@ int main(int argc, char **argv) {
                         memset(p + last_size, 1, size - last_size);
                 }
                 gettimeofday(&tv0, NULL);
+                if (pipe(pip) == -1) {
+                    fprintf(stderr, "%s: cannot create pipe: %s\n",
+                            cmnd, strerror(errno));
+                    exit(1);
+                }
+                fprintf(stderr, "pipe fds: %d %d\n", pip[0], pip[1]);
                 switch (pid = fork()) {
                 case -1:
                         fprintf(stderr, "%s: cannot fork: %s\n",
@@ -53,13 +55,16 @@ int main(int argc, char **argv) {
                         exit(1);
                         break;
                 case 0:
+                        close(pip[0]);
+                        fprintf(stderr, "process %d writing to fd %d\n", getpid(), pip[1]);
                         write(pip[1], "f", 1);
                         exit(0);
                 default:
+                        close(pip[1]);
                         read(pip[0], buf, 1);
                         gettimeofday(&tv1, NULL);
                         while (wait3(NULL, WNOHANG, NULL) > 0);
-                        s++;
+                        close(pip[0]);
                 }
                 gettimeofday(&tv2, NULL);
                 printf("%lu %g %g\n",
