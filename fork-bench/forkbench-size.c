@@ -47,7 +47,6 @@ int main(int argc, char **argv) {
                             cmnd, strerror(errno));
                     exit(1);
                 }
-                fprintf(stderr, "pipe fds: %d %d\n", pip[0], pip[1]);
                 switch (pid = fork()) {
                 case -1:
                         fprintf(stderr, "%s: cannot fork: %s\n",
@@ -56,7 +55,6 @@ int main(int argc, char **argv) {
                         break;
                 case 0:
                         close(pip[0]);
-                        fprintf(stderr, "process %d writing to fd %d\n", getpid(), pip[1]);
                         write(pip[1], "f", 1);
                         exit(0);
                 default:
@@ -72,7 +70,7 @@ int main(int argc, char **argv) {
                                 (tv1.tv_sec + tv1.tv_usec * 1E-6) -
                                 (tv0.tv_sec + tv0.tv_usec * 1E-6),
                                 (tv2.tv_sec + tv2.tv_usec * 1E-6) -
-                                (tv0.tv_sec + tv0.tv_usec * 1E-6)
+                                (tv1.tv_sec + tv1.tv_usec * 1E-6)
                       );
         }
 	exit(0);
