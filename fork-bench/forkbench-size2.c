@@ -49,8 +49,8 @@ int main(int argc, char **argv) {
 			break;
 		case 0:
                         gettimeofday(&tv1, NULL);
-                        printf("run %d, after fork, %d successful, %d failed: %g seconds\n",
-                                        i, s, f,
+                        printf("size %lu run %d after fork successful %d failed %d time %g\n",
+                                        (unsigned long)size, i, s, f,
                                         (tv1.tv_sec + tv1.tv_usec * 1E-6) -
                                         (tv0.tv_sec + tv0.tv_usec * 1E-6)
                               );
@@ -63,8 +63,8 @@ int main(int argc, char **argv) {
 			s++;
 		}
                 gettimeofday(&tv1, NULL);
-                printf("run %d, after wait, %d successful, %d failed: %g seconds\n",
-                                i, s, f,
+                printf("size %lu run %d after wait successful %d failed %d time %g\n",
+                                (unsigned long)size, i, s, f,
                                 (tv1.tv_sec + tv1.tv_usec * 1E-6) -
                                 (tv0.tv_sec + tv0.tv_usec * 1E-6)
                       );
