@@ -41,7 +41,6 @@ int main(int argc, char **argv) {
         setlinebuf(stdout);
         memset(p, 1, size);
 	for (i = 0; i < n; i++) {
-                sleep(1);
                 gettimeofday(&tv0, NULL);
 		pid_t pid;
                 switch (pid = fork()) {
@@ -59,6 +58,7 @@ int main(int argc, char **argv) {
 			exit(0);
 		default: ;
 			s++;
+                        sleep(1);
 		}
 	}
 	for (i = 0; i < n; i++) {
