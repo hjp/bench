@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.11 2010-05-12 13:08:49 hjp Exp $";
+	"$Id: diskbench.c,v 1.12 2015-07-25 11:10:48 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,6 +12,9 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
+ * Revision 1.12  2015-07-25 11:10:48  hjp
+ * diskbench: print filename and maxlen if verbose
+ *
  * Revision 1.11  2010-05-12 13:08:49  hjp
  * no real change
  *
@@ -165,10 +168,12 @@ void diskbench (char ***argvp)
 		if (strcmp(**argvp, "filename") == 0) {
 			(*argvp)++;
 			testfile = (**argvp);
+                        if (verbose) printf ("testfile: %s\n", testfile);
 			(*argvp)++;
 		} else if (strcmp(**argvp, "maxlen") == 0) {
 			(*argvp)++;
 			maxlen = strtod(**argvp, NULL);
+                        if (verbose) printf ("maxlen: %g\n", maxlen);
 			(*argvp)++;
 		} else {
 			break;
