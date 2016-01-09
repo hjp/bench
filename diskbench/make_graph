@@ -10,7 +10,16 @@ then
     ./diskbench "$1" > "$2"
 fi
 
-if gnuplot --version | grep '^gnuplot 4' 
+if gnuplot --version | grep '^gnuplot 4\.6'
+then
+	gnuplot <<-EOF
+	 set style data dots
+	 set grid
+	 set term png size 800,600
+	 set output "$2.png"
+	 plot "$2" using 1:4
+	EOF
+elif gnuplot --version | grep '^gnuplot 4' 
 then
 	gnuplot <<-EOF
 	 set style data dots
