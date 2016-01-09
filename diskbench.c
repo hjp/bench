@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.13 2016-01-09 00:34:29 hjp Exp $";
+	"$Id: diskbench.c,v 1.14 2016-01-09 00:43:00 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,6 +12,12 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
+ * Revision 1.14  2016-01-09 00:43:00  hjp
+ * Add incomplete seek_parallel bench
+ *
+ * I obviously started to add a parallel seek benchmark, but it doesn't look like
+ * it does what it's supposed to do (it doesn't even fork).
+ *
  * Revision 1.13  2016-01-09 00:34:29  hjp
  * Add parameter maxtime
  *
@@ -148,6 +154,105 @@ static double drand (double limit) {
 #define OWFLAGS (O_WRONLY|O_CREAT|O_BINARY|O_LARGEFILE)
 #define ORFLAGS (O_RDONLY|O_LARGEFILE)
 
+void seek_sequential(const char *testfile, int nr_seeks, double len) {
+	int fd;
+	double tr, tc;
+	int i;
+        resettimer ();
+	if ((fd = open (testfile, ORFLAGS)) == -1) {
+		printf ("Oops ! I cannot open the test file\n"
+			"DOS says : \"%s\"\n", strerror (errno));
+		return;
+	}
+	for (i = 0; i < nr_seeks; i ++) {
+		off64_t	pos = drand (len);
+		int     rc;
+		char	buf [BUFSIZE];
+
+		if (lseek64 (fd, pos, SEEK_SET) < 0) {
+			printf ("cannot seek to position %ld\n"
+			"OS says : \"%s\"\n", (long)pos, strerror (errno));
+		}
+		if ((rc = read (fd, buf, 1)) != 1) {
+			if (rc == 0) { 
+				printf ("unexpected EOF at %ld\n",
+					(long)pos);
+			} else {
+				printf ("read error at position %ld\n"
+				"OS says : \"%s\"\n", (long)pos, strerror (errno));
+			}
+		}
+	}
+
+	close (fd);
+
+        gettimer (&tr, &tc);
+
+	if (verbose) {
+		printf ("\n%d seeks in %g seconds (%g seeks / second)\n",
+			nr_seeks, tr,
+			tr != 0 ? nr_seeks/tr : 0.0 );
+		printf ("CPU time: %g\n", tc);
+	} else {
+		printf ("%d	| %g	| %g 	| %g	| ",
+			nr_seeks, tr, tc, 
+			tr != 0 ? nr_seeks/tr : 0.0 );
+	}
+	printf ("\n");
+
+	unlink (testfile);
+}
+
+void seek_parallel(int parallel, const char *testfile, int nr_seeks, double len) {
+	int fd;
+	double tr, tc;
+	int i;
+        resettimer ();
+	srand(getpid() << 17 ^ time(NULL));
+	if ((fd = open (testfile, ORFLAGS)) == -1) {
+		printf ("Oops ! I cannot open the test file\n"
+			"DOS says : \"%s\"\n", strerror (errno));
+		return;
+	}
+	for (i = 0; i < nr_seeks; i ++) {
+		off64_t	pos = drand (len);
+		int     rc;
+		char	buf [BUFSIZE];
+
+		if (lseek64 (fd, pos, SEEK_SET) < 0) {
+			printf ("cannot seek to position %ld\n"
+			"OS says : \"%s\"\n", (long)pos, strerror (errno));
+		}
+		if ((rc = read (fd, buf, 1)) != 1) {
+			if (rc == 0) { 
+				printf ("unexpected EOF at %ld\n",
+					(long)pos);
+			} else {
+				printf ("read error at position %ld\n"
+				"OS says : \"%s\"\n", (long)pos, strerror (errno));
+			}
+		}
+	}
+
+	close (fd);
+
+        gettimer (&tr, &tc);
+
+	if (verbose) {
+		printf ("\n%d seeks in %g seconds (%g seeks / second)\n",
+			nr_seeks, tr,
+			tr != 0 ? nr_seeks/tr : 0.0 );
+		printf ("CPU time: %g\n", tc);
+	} else {
+		printf ("%d	| %g	| %g 	| %g	| ",
+			nr_seeks, tr, tc, 
+			tr != 0 ? nr_seeks/tr : 0.0 );
+	}
+	printf ("\n");
+
+	unlink (testfile);
+}
+
 void diskbench (char ***argvp)
 {
 	int	fd;
@@ -160,9 +265,11 @@ void diskbench (char ***argvp)
 	int	rc;
 	double	maxtime = 60;	/* max time to write test file */
 	double	tr, tc;
+	double  maxtime = 60;
 	int	ltr = 0;	/* last value of tr (rounded down to seconds */
 	int	i;
 	int 	nr_seeks;
+	int     parallel;
 
 	(*argvp)++;
 
@@ -183,6 +290,10 @@ void diskbench (char ***argvp)
 			(*argvp)++;
 			maxtime = strtod(**argvp, NULL);
                         if (verbose) printf ("maxtime: %g\n", maxtime);
+			(*argvp)++;
+		} else if (strcmp(**argvp, "maxtime") == 0) {
+			(*argvp)++;
+			maxtime = strtod(**argvp, NULL);
 			(*argvp)++;
 		} else {
 			break;
@@ -308,46 +419,11 @@ void diskbench (char ***argvp)
 
 
         if (verbose) printf ("Seek test ...\n");
-        resettimer ();
 
-	if ((fd = open (testfile, ORFLAGS)) == -1) {
-		printf ("Oops ! I cannot open the test file\n"
-			"DOS says : \"%s\"\n", strerror (errno));
-		return;
-	}
-	for (i = 0; i < nr_seeks; i ++) {
-		off64_t	pos = drand (len);
-
-		if (lseek64 (fd, pos, SEEK_SET) < 0) {
-			printf ("cannot seek to position %ld\n"
-			"OS says : \"%s\"\n", (long)pos, strerror (errno));
-		}
-		if ((rc = read (fd, buf, 1)) != 1) {
-			if (rc == 0) { 
-				printf ("unexpected EOF at %ld\n",
-					(long)pos);
-			} else {
-				printf ("read error at position %ld\n"
-				"OS says : \"%s\"\n", (long)pos, strerror (errno));
-			}
-		}
-	}
-
-	close (fd);
-
-        gettimer (&tr, &tc);
-
-	if (verbose) {
-		printf ("\n%d seeks in %g seconds (%g seeks / second)\n",
-			nr_seeks, tr,
-			tr != 0 ? nr_seeks/tr : 0.0 );
-		printf ("CPU time: %g\n", tc);
+	if (parallel) {
+		seek_parallel(parallel, testfile, nr_seeks, len);
 	} else {
-		printf ("%d	| %g	| %g 	| %g	| ",
-			nr_seeks, tr, tc, 
-			tr != 0 ? nr_seeks/tr : 0.0 );
+		seek_sequential(testfile, nr_seeks, len);
 	}
-	printf ("\n");
-
-	unlink (testfile);
 }
+
