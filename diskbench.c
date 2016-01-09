@@ -1,5 +1,5 @@
 char diskbench_c_rcs_id [] =
-	"$Id: diskbench.c,v 1.12 2015-07-25 11:10:48 hjp Exp $";
+	"$Id: diskbench.c,v 1.13 2016-01-09 00:34:29 hjp Exp $";
 /*
  *	diskbench
  *
@@ -12,6 +12,9 @@ char diskbench_c_rcs_id [] =
  *	see diskbench.notes for typical throughputs [kB/s]:
  *
  * $Log: diskbench.c,v $
+ * Revision 1.13  2016-01-09 00:34:29  hjp
+ * Add parameter maxtime
+ *
  * Revision 1.12  2015-07-25 11:10:48  hjp
  * diskbench: print filename and maxlen if verbose
  *
@@ -155,6 +158,7 @@ void diskbench (char ***argvp)
 	double	maxlen = DBL_MAX;	/* max length of the test file	*/
 	double	len = 0;		/* length of the test file	*/
 	int	rc;
+	double	maxtime = 60;	/* max time to write test file */
 	double	tr, tc;
 	int	ltr = 0;	/* last value of tr (rounded down to seconds */
 	int	i;
@@ -174,6 +178,11 @@ void diskbench (char ***argvp)
 			(*argvp)++;
 			maxlen = strtod(**argvp, NULL);
                         if (verbose) printf ("maxlen: %g\n", maxlen);
+			(*argvp)++;
+		} else if (strcmp(**argvp, "maxtime") == 0) {
+			(*argvp)++;
+			maxtime = strtod(**argvp, NULL);
+                        if (verbose) printf ("maxtime: %g\n", maxtime);
 			(*argvp)++;
 		} else {
 			break;
@@ -202,7 +211,7 @@ void diskbench (char ***argvp)
 
 	len = 0;
 	tr = 0;
-	while (tr <= 60 && len < maxlen && (rc = write (fd, buf, BUFSIZE)) > 0) {
+	while (tr <= maxtime && len < maxlen && (rc = write (fd, buf, BUFSIZE)) > 0) {
 	    len += rc;
 	    gettimer (&tr, &tc);
 	    if (verbose && (int)tr != ltr) {
