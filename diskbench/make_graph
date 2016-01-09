@@ -13,7 +13,7 @@ fi
 if gnuplot --version | grep '^gnuplot 4' 
 then
     gnuplot <<EOF
-     set data style dots
+     set style data dots
      set grid
      set term png size 800,600
      set output "$2.png"
