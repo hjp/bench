@@ -265,7 +265,6 @@ void diskbench (char ***argvp)
 	int	rc;
 	double	maxtime = 60;	/* max time to write test file */
 	double	tr, tc;
-	double  maxtime = 60;
 	int	ltr = 0;	/* last value of tr (rounded down to seconds */
 	int	i;
 	int 	nr_seeks;
