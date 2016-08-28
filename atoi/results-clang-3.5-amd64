@@ -1,0 +1,30 @@
+schellong_misra 0.249572 seconds, 3.80817e-09 seconds/op
+schellong_misra 0.249602 seconds, 3.80862e-09 seconds/op
+schellong_misra 0.249621 seconds, 3.80891e-09 seconds/op
+schellong_misra 0.2497 seconds, 3.81012e-09 seconds/op
+schellong_misra 0.249711 seconds, 3.81029e-09 seconds/op
+
+schellong_goto 0.289599 seconds, 4.41893e-09 seconds/op
+schellong_goto 0.289821 seconds, 4.42232e-09 seconds/op
+schellong_goto 0.289876 seconds, 4.42316e-09 seconds/op
+schellong_goto 0.289901 seconds, 4.42354e-09 seconds/op
+schellong_goto 0.28993 seconds, 4.42398e-09 seconds/op
+
+weikusat_a2n_unrolled 0.326202 seconds, 4.97745e-09 seconds/op
+weikusat_a2n_unrolled 0.326435 seconds, 4.981e-09 seconds/op
+weikusat_a2n_unrolled 0.331396 seconds, 5.0567e-09 seconds/op
+weikusat_a2n_unrolled 0.334529 seconds, 5.10451e-09 seconds/op
+weikusat_a2n_unrolled 0.335924 seconds, 5.12579e-09 seconds/op
+
+weikusat_a2n 0.353576 seconds, 5.39514e-09 seconds/op
+weikusat_a2n 0.35358 seconds, 5.3952e-09 seconds/op
+weikusat_a2n 0.353732 seconds, 5.39752e-09 seconds/op
+weikusat_a2n 0.353741 seconds, 5.39766e-09 seconds/op
+weikusat_a2n 0.353764 seconds, 5.39801e-09 seconds/op
+
+reuther 0.462066 seconds, 7.05057e-09 seconds/op
+reuther 0.462405 seconds, 7.05574e-09 seconds/op
+reuther 0.462427 seconds, 7.05608e-09 seconds/op
+reuther 0.463705 seconds, 7.07558e-09 seconds/op
+reuther 0.464027 seconds, 7.08049e-09 seconds/op
+
