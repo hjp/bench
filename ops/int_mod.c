@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <ant/time.h>
 
 extern void dummy(double d);
