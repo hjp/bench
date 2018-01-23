@@ -1,6 +1,8 @@
 #!/bin/sh
 dir=`dirname $0`
 fs=`df -P . | awk 'NR == 2 {print $NF}'`
+free=`df -P . | awk 'NR == 2 {print $4}'`
+free=$((free * 1024 * 1/2))
 mountinfo=`mount | grep "on $fs "`
 $dir/bench id "`uname -a`
-$mountinfo" verbose disk maxlen 51539607552 maxtime 300 tree | tee $dir/`hostname`.`date '+%Y-%m-%d:%H:%M:%S'`
+$mountinfo" verbose disk maxlen $free maxtime 300 tree | tee $dir/`hostname`.`date '+%Y-%m-%d:%H:%M:%S'`
