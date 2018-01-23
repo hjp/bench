@@ -113,6 +113,7 @@ char diskbench_c_rcs_id [] =
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include <sys/types.h>
 #include <fcntl.h>
