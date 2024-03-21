@@ -20,7 +20,6 @@ int main(int argc, char **argv) {
     }
     struct timeval t0;
     gettimeofday(&t0, NULL);
-    int s = 0;
     for (size_t i = 0; i < n; i++) {
 	ip[i] = rand();
     }
